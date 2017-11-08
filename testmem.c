@@ -12,6 +12,11 @@ void* Mem_Alloc(int size){
 
 
 }
+
+int Mem_Free(void* ptr){
+  return 0;
+}
+
 float Mem_GetFragmentation(){
 
   return 1;
