@@ -12,7 +12,10 @@ void* Mem_Alloc(int size){
 
 
 }
+float Mem_GetFragmentation(){
 
+  return 1;
+}
 
 
 void* myalloc(int size)
