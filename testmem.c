@@ -3,26 +3,6 @@
 
 #define REGION_SIZE (10*1024)
 
-int Mem_Init(int size, int policy){
-
-  return 0;
-}
-
-void* Mem_Alloc(int size){
-
-
-}
-
-int Mem_Free(void* ptr){
-  return 0;
-}
-
-float Mem_GetFragmentation(){
-
-  return 1;
-}
-
-
 void* myalloc(int size)
 {
   printf("allocate memory of size=%d bytes...", size);
