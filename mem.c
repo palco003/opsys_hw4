@@ -9,15 +9,8 @@ int Mem_Init(int size, int policy){
 		return -1;
 	}
 
-	if(mem_policy != -1){
-		return -1;
-	}
-
 	if(policy != MEM_POLICY_FIRSTFIT && policy != MEM_POLICY_BESTFIT && policy != MEM_POLICY_WORSTFIT){
 		return -1;
-	}
-	else{
-		mem_policy = policy;
 	}
 
 	// make sure that the region size is page alligned
