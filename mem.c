@@ -4,6 +4,18 @@
 #include <fcntl.h>
 #include "mem.h"
 
+typedef struct allocated_memory {
+	int size;
+	int magicNumber;
+} allocated_mem;
+
+typedef struct free_memory {
+	int size;
+	struct free_memory *next;
+} free_mem;
+
+static free_mem *free_head_node = NULL;
+
 int Mem_Init(int size, int policy){
   if(size <= 0){
 		return -1;
@@ -30,7 +42,7 @@ int Mem_Init(int size, int policy){
 	// get the chunk of memory
 
 	int fd = open("/dev/zero", O_RDWR);
-	free_head_node =(free_mem *) mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+	free_head_node = (free_mem *) mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 
 	if(free_head_node == NULL){
 		return -1;
