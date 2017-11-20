@@ -9,7 +9,7 @@ int global_policy = -1;
 
 typedef struct allocated_memory {
   int size;
-  // int magicNumber;
+  int magicNumber;
 } allocated_mem;
 
 typedef struct free_memory {
@@ -210,7 +210,7 @@ void* Mem_Alloc(int size){
 
   allocated_mem *allocation = (allocated_mem *) found;
   allocation->size = size;
-  // allocation->magicNumber = MAGIC_NUMBER;
+  allocation->magicNumber = MAGIC_NUMBER;
 
   printf("allocated address = %016lx\n",(unsigned int) allocation);
   printf("allocated ending address = %016lx\n", (void *)allocation + (unsigned int)allocation->size);
