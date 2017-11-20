@@ -112,7 +112,7 @@ void *Mem_Alloc(int size){
 	// go through the free list to find the position that we want to allocate
 	//printf("before trying to find the correct node\n");
 		while(current != NULL){
-			if(mem_policy == P_FIRSTFIT){
+			if(mem_policy == MEM_POLICY_FIRSTFIT){
 				printf("current->size = %d\n", current->size);
 				printf("size i'm looking for = %d\n", size);
 				if(current->size >= size){
@@ -122,7 +122,7 @@ void *Mem_Alloc(int size){
 				}
 			}
 
-			else if(mem_policy == P_BESTFIT){
+			else if(mem_policy == MEM_POLICY_BESTFIT){
 				if(current->size == size){
 //					printf("current->size = %d\n", current->size);
 //					printf("size to be allocated = %d\n", size);
@@ -148,7 +148,7 @@ void *Mem_Alloc(int size){
 
 			}
 
-			else if(mem_policy == P_WORSTFIT){
+			else if(mem_policy == MEM_POLICY_WORSTFIT){
 //				printf("current->size = %d\n", current->size);
 //				printf("size to be allocated = %d\n", size);
 				if(current->size >= size){
