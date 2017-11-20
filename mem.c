@@ -43,7 +43,7 @@ int Mem_Init(int sizeOfRegion, int policy){
 		return -1;
 	}
 
-	if(policy != P_BESTFIT && policy != P_WORSTFIT && policy != P_FIRSTFIT){
+	if(policy != MEM_POLICY_BESTFIT && policy != MEM_POLICY_WORSTFIT && policy != MEM_POLICY_FIRSTFIT){
 		return -1;
 	}
 	else{
