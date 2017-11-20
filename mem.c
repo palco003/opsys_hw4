@@ -2,6 +2,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/mman.h>
 #include "mem.h"
 
 typedef struct allocated_memory {
@@ -39,12 +40,12 @@ int Mem_Init(int size, int policy){
 
 	printf("Size of region to be allocated = %d\n", size);
 
-	// get the chunk of memory
-
+  // open the /dev/zero device
 	int fd = open("/dev/zero", O_RDWR);
 	free_head_node = (free_mem *) mmap(NULL, size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
 
 	if(free_head_node == NULL){
+    perror("mmap");
 		return -1;
 	}
 
