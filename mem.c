@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/types.h>
 #include "mem.h"
 
 int Mem_Init(int size, int policy){
@@ -10,7 +11,7 @@ int Mem_Init(int size, int policy){
 		return -1;
 	}
 
-	if(policy != P_BESTFIT && policy != P_WORSTFIT && policy != P_FIRSTFIT){
+	if(policy != MEM_POLICY_FIRSTFIT && policy != MEM_POLICY_BESTFIT && policy != MEM_POLICY_WORSTFIT){
 		return -1;
 	}
 	else{
