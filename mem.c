@@ -221,8 +221,118 @@ void* Mem_Alloc(int size){
 }
 
 int Mem_Free(void* ptr){
+  if(ptr == NULL){
+    return -1;
+  }
+
+  allocated_mem *dealloc = (allocated_mem *) (ptr - 8);
+
+
+  if(dealloc->magicNumber != MAGIC_NUMBER){
+    return -1;
+  }
+
+
+  /* known that the pointer is valid and needs to be free'd so replace it
+  with a free_mem struct instead of an allocated one */
+
+  free_mem *freed = (free_mem*) dealloc;
+
+  //	printf("freed pointer = %8x\n", ((unsigned long)freed));
+
+  free_mem *previous = NULL;
+  free_mem *current = free_head_node;
+
+  free_mem *prev_free_found = NULL;
+  free_mem *next_free_found = current;
+
+
+
+  //	printf("\n\nBefore Freeing the chunk: %8x\n\n\n", freed);
+  //	Mem_Dump();
+
+  /* Find the previous free chunk and the next free chunk */
+
+  while(current != NULL){
+    if(current > freed){
+      prev_free_found = previous;
+      next_free_found = current;
+      break;
+    }
+    previous = current;
+    current = current->next;
+  }
+
+  // link the new free chunk into the free list
+  freed->next = next_free_found;
+
+  if(prev_free_found == NULL){
+    free_head_node = freed;
+    merge1(free_head_node);
+    //merge(freed, free_head_node);
+    //free_head_node = freed;
+  }
+  else{
+    prev_free_found->next = freed;
+
+    merge1(prev_free_found->next);
+    merge1(prev_free_found);
+
+    //merge(prev_free_found, freed);
+    //merge(freed, next_free_found);
+  }
+
   return 0;
 }
+
+
+void merge1(void *free_chunk){
+
+  free_mem *chunk = (free_mem *)free_chunk;
+
+  if(chunk == NULL || chunk->next == NULL){
+    return;
+  }
+
+  if(((int) (chunk + 1) + chunk->size) == (int) chunk->next){
+    chunk->size += sizeof(free_mem) + chunk->next->size;
+    chunk->next = chunk->next->next;
+  }
+}
+
+
+void merge(void *first_chunk, void *second_chunk){
+  free_mem *first = (free_mem *)first_chunk;
+  free_mem *second = (free_mem *)second_chunk;
+
+  printf("ending address of first = %016lx\n", ((void *)first) + (unsigned int)first->size);
+  printf("starting address of second = %016lx\n", second);
+
+  printf("ending address = %016lx\n",(void *)second + (unsigned int)second->size);
+
+  if(((void *)(((void *)first) + (unsigned int)first->size)) == ((void *) second - (unsigned int)8)){
+    first->size += second->size + sizeof(free_mem);
+    first->next = second->next;
+    printf("two chunks were merged\n");
+    printf("address = %016lx\n", first);
+    printf("ending address = %016lx\n",(void *)first + (unsigned int)first->size);
+    printf("size of new chunk = %d\n", first->size);
+  }
+
+
+}
+void Mem_Dump(){
+
+  printf("------------------------------\nFREE LIST:\n");
+  free_mem* current = free_head_node;
+  while(current != NULL){
+    printf("address: %8x, total size: %d \n", current, current->size);
+    current = current->next;
+  }
+  printf("------------------------------\n");
+
+}
+
 
 float Mem_GetFragmentation(){
 
