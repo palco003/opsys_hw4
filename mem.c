@@ -5,6 +5,8 @@
 #include <sys/mman.h>
 #include "mem.h"
 
+#define MAGIC_NUMBER 123
+
 int global_policy = -1;
 
 typedef struct allocated_memory {
