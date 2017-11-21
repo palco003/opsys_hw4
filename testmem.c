@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
   myalloc(1000);              // fail
 
   printf("init memory allocator...");
-  if(Mem_Init(REGION_SIZE, MEM_POLICY_WORSTFIT) < 0) {
+  if(Mem_Init(REGION_SIZE, MEM_POLICY_BESTFIT) < 0) {
     printf("  unable to initialize memory allocator!\n");
     return -1;
   } else printf("  success!\n");
