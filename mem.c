@@ -276,7 +276,7 @@ int Mem_Free(void *ptr){
 
 
 //	// printf("\n\nBefore Freeing the chunk: %8x\n\n\n", freed);
-	Mem_Dump();
+	// Mem_Dump();
 
 	/* Find the previous free chunk and the next free chunk */
 

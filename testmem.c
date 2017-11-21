@@ -29,7 +29,7 @@ void myfree(void* p)
 
 int main(int argc, char* argv[])
 {
-  myalloc(1000);
+  myalloc(1000);              // fail
 
   printf("init memory allocator...");
   if(Mem_Init(REGION_SIZE, MEM_POLICY_FIRSTFIT) < 0) {
@@ -50,16 +50,16 @@ int main(int argc, char* argv[])
   void* x2 = myalloc(64);
   void* p2 = myalloc(100);
   void* x3 = myalloc(64);
-  void* p3 = myalloc(100000);
+  void* p3 = myalloc(100000); //  fail
   void* x4 = myalloc(64);
   void* p4 = myalloc(500);
   void* x5 = myalloc(64);
   myfree(p1);
-  myfree(p1+10);
+  myfree(p1+10);              //  fail
   myfree(p2+10);
-  myfree(p3);
+  myfree(p3);                 //  fail
   void* p5 = myalloc(50);
-  myfree(NULL);
+  myfree(NULL);               //  fail
   myfree(x1);
   myfree(x2);
   myfree(x3+10);
