@@ -256,9 +256,9 @@ int Mem_Free(void *ptr){
 	allocated_mem *dealloc = (allocated_mem *) (ptr - 8);
 
 
-	if(dealloc->magicNumber != MAGIC_NUMBER){
-		return -1;
-	}
+	// if(dealloc->magicNumber != MAGIC_NUMBER){
+	// 	return -1;
+	// }
 
 
 	/* known that the pointer is valid and needs to be free'd so replace it
