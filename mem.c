@@ -350,7 +350,7 @@ if(((void *)(((void *)first) + (unsigned int)first->size)) == ((void *) second -
 }
 void Mem_Dump(){
 
-	printf("------------------------------\nFREE LIST:\n");
+	printf("\n------------------------------\nFREE LIST:\n");
 	free_mem* current = free_head_node;
 	while(current != NULL){
 		printf("address: %8x, total size: %d \n", current, current->size);
