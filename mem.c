@@ -54,15 +54,15 @@ int Mem_Init(int sizeOfRegion, int policy){
 
 	int page_size = getpagesize();
 
-	// printf("Size of region = %d\n", sizeOfRegion);
-	// printf("Page size = %d\n", page_size);
+	// // printf("Size of region = %d\n", sizeOfRegion);
+	// // printf("Page size = %d\n", page_size);
 
 	int alligned = sizeOfRegion % page_size;
 	if(alligned != 0){
 		sizeOfRegion += page_size - alligned;
 	}
 
-	// printf("Size of region to be allocated = %d\n", sizeOfRegion);
+	// // printf("Size of region to be allocated = %d\n", sizeOfRegion);
 
 	// get the chunk of memory
 
@@ -78,7 +78,7 @@ int Mem_Init(int sizeOfRegion, int policy){
 	free_head_node->size = sizeOfRegion - sizeof(free_mem);
 	free_head_node->next = NULL;
 
-//	printf("memory chunk address: %8x\nsize = %d\n", free_head_node, free_head_node->size);
+//	// printf("memory chunk address: %8x\nsize = %d\n", free_head_node, free_head_node->size);
 
 	return 0;
 }
@@ -91,13 +91,13 @@ void *Mem_Alloc(int size){
 
 	// Going to need space to store the header for the memory, so add that size to current size
 	// and then make sure that the new number is word alligned
-//	printf("raw size = %d\n", size);
+//	// printf("raw size = %d\n", size);
 	int needed_size = 4 + sizeof(free_mem);
 
 
 	int alligned = size % 4;
 	size += alligned;
-//	printf("alligned size = %d\n", size);
+//	// printf("alligned size = %d\n", size);
 
 	// make a previous node that is initally set to NULL and keep it updated, if at the end it is still NULL,
 	// then we know that the new head of the free list is *next, otherwise the head of the free list is
@@ -110,11 +110,11 @@ void *Mem_Alloc(int size){
 	free_mem *found_previous = NULL;
 
 	// go through the free list to find the position that we want to allocate
-	//printf("before trying to find the correct node\n");
+	//// printf("before trying to find the correct node\n");
 		while(current != NULL){
 			if(mem_policy == MEM_POLICY_FIRSTFIT){
-				printf("current->size = %d\n", current->size);
-				printf("size i'm looking for = %d\n", size);
+				// printf("current->size = %d\n", current->size);
+				// printf("size i'm looking for = %d\n", size);
 				if(current->size >= size){
 					found_previous = previous;
 					found = current;
@@ -124,8 +124,8 @@ void *Mem_Alloc(int size){
 
 			else if(mem_policy == MEM_POLICY_BESTFIT){
 				if(current->size == size){
-//					printf("current->size = %d\n", current->size);
-//					printf("size to be allocated = %d\n", size);
+//					// printf("current->size = %d\n", current->size);
+//					// printf("size to be allocated = %d\n", size);
 
 					found_previous = previous;
 					found = current;
@@ -133,14 +133,14 @@ void *Mem_Alloc(int size){
 				}
 				else if(current->size > size){
 					if(found == NULL){
-					//	printf("current->size = %d\n", current->size);
-					//	printf("size to be allocated = %d\n", size);
+					//	// printf("current->size = %d\n", current->size);
+					//	// printf("size to be allocated = %d\n", size);
 						found_previous = previous;
 						found = current;
 					}
 					else if(current->size < found->size){
-					//	printf("current->size = %d\n", current->size);
-					//	printf("size to be allocated = %d\n", size);
+					//	// printf("current->size = %d\n", current->size);
+					//	// printf("size to be allocated = %d\n", size);
 						found_previous = previous;
 						found = current;
 					}
@@ -149,8 +149,8 @@ void *Mem_Alloc(int size){
 			}
 
 			else if(mem_policy == MEM_POLICY_WORSTFIT){
-//				printf("current->size = %d\n", current->size);
-//				printf("size to be allocated = %d\n", size);
+//				// printf("current->size = %d\n", current->size);
+//				// printf("size to be allocated = %d\n", size);
 				if(current->size >= size){
 					if(found == NULL){
 						found_previous = previous;
@@ -168,11 +168,11 @@ void *Mem_Alloc(int size){
 
 		}
 
-//		printf("found = %016lx\n", found);
-//		printf("found ending address = %016lx\n",(void*) found + (unsigned int) found->size);
+//		// printf("found = %016lx\n", found);
+//		// printf("found ending address = %016lx\n",(void*) found + (unsigned int) found->size);
 		//found = (((void *)found) - ((unsigned int) 7));
 		if(found == NULL){
-			printf("Never found the right size and returned null\n");
+			// printf("Never found the right size and returned null\n");
 			return NULL;
 		}
 
@@ -182,7 +182,7 @@ void *Mem_Alloc(int size){
 		update the free list */
 
 		unsigned int unused_space = ((unsigned int)(found->size)) -((unsigned int) size);
-//		 printf("unused space = %d\n", unused_space);
+//		 // printf("unused space = %d\n", unused_space);
 		/* relink the free list to make sure the found node isn't being referenced */
 
 
@@ -193,15 +193,15 @@ void *Mem_Alloc(int size){
 
 //			free_mem *node_split = ((free_mem *) found) + address;
 			free_mem *node_split =(free_mem*) (((void *) found) + address);
-			//printf("found address = %016lx\n", found);
-			//printf("found->size = %d\n", found->size);
-			//printf("size of header = %d\n", sizeof(free_mem));
-			//printf("new size = %d\n", found->size - size - sizeof(free_mem));
-			//printf("address = %016lx\n", address);
-			//printf("node_split address = %016lx\n",  node_split);
+			//// printf("found address = %016lx\n", found);
+			//// printf("found->size = %d\n", found->size);
+			//// printf("size of header = %d\n", sizeof(free_mem));
+			//// printf("new size = %d\n", found->size - size - sizeof(free_mem));
+			//// printf("address = %016lx\n", address);
+			//// printf("node_split address = %016lx\n",  node_split);
 			node_split->size = found->size - size - sizeof(free_mem);
-			//printf("new free node size = %d\n", node_split->size);
-			//printf("good here\n");
+			//// printf("new free node size = %d\n", node_split->size);
+			//// printf("good here\n");
 			//fflush(stdout);
 
 			node_split->next = found->next;
@@ -217,9 +217,9 @@ void *Mem_Alloc(int size){
 		}
 		else if((found->size > size && unused_space < needed_size)){
 
-			printf("Unused space is too small to be a new chunk, add it onto the allocated memory\n");
+			// printf("Unused space is too small to be a new chunk, add it onto the allocated memory\n");
 			size += unused_space;
-			printf("new size = %d\n", size);
+			// printf("new size = %d\n", size);
 			/* there isn't enough unused space to make a chunk out of
 			   so give the entire chunk to the user */
 			if(found_previous == NULL){
@@ -237,8 +237,8 @@ void *Mem_Alloc(int size){
 		allocation->size = size;
 		allocation->magicNumber = MAGIC_NUMBER;
 
-//		printf("allocated address = %016lx\n",(unsigned int) allocation);
-//		printf("allocated ending address = %016lx\n", (void *)allocation + (unsigned int)allocation->size);
+//		// printf("allocated address = %016lx\n",(unsigned int) allocation);
+//		// printf("allocated ending address = %016lx\n", (void *)allocation + (unsigned int)allocation->size);
 //		checking to see if my makefile still thinks this is up to date
 
 
@@ -266,7 +266,7 @@ int Mem_Free(void *ptr){
 
 	free_mem *freed = (free_mem*) dealloc;
 
-//	printf("freed pointer = %8x\n", ((unsigned long)freed));
+//	// printf("freed pointer = %8x\n", ((unsigned long)freed));
 
 	free_mem *previous = NULL;
 	free_mem *current = free_head_node;
@@ -276,7 +276,7 @@ int Mem_Free(void *ptr){
 
 
 
-//	printf("\n\nBefore Freeing the chunk: %8x\n\n\n", freed);
+//	// printf("\n\nBefore Freeing the chunk: %8x\n\n\n", freed);
 //	Mem_Dump();
 
 	/* Find the previous free chunk and the next free chunk */
@@ -332,31 +332,31 @@ void merge(void *first_chunk, void *second_chunk){
 	free_mem *first = (free_mem *)first_chunk;
 	free_mem *second = (free_mem *)second_chunk;
 
-	printf("ending address of first = %016lx\n", ((void *)first) + (unsigned int)first->size);
-	printf("starting address of second = %016lx\n", second);
+	// printf("ending address of first = %016lx\n", ((void *)first) + (unsigned int)first->size);
+	// printf("starting address of second = %016lx\n", second);
 
-	printf("ending address = %016lx\n",(void *)second + (unsigned int)second->size);
+	// printf("ending address = %016lx\n",(void *)second + (unsigned int)second->size);
 
 if(((void *)(((void *)first) + (unsigned int)first->size)) == ((void *) second - (unsigned int)8)){
 	first->size += second->size + sizeof(free_mem);
 	first->next = second->next;
-	printf("two chunks were merged\n");
-	printf("address = %016lx\n", first);
-	printf("ending address = %016lx\n",(void *)first + (unsigned int)first->size);
-	printf("size of new chunk = %d\n", first->size);
+	// printf("two chunks were merged\n");
+	// printf("address = %016lx\n", first);
+	// printf("ending address = %016lx\n",(void *)first + (unsigned int)first->size);
+	// printf("size of new chunk = %d\n", first->size);
 }
 
 
 }
 void Mem_Dump(){
 
-	printf("------------------------------\nFREE LIST:\n");
+	// printf("------------------------------\nFREE LIST:\n");
 	free_mem* current = free_head_node;
 	while(current != NULL){
-		printf("address: %8x, total size: %d \n", current, current->size);
+		// printf("address: %8x, total size: %d \n", current, current->size);
 		current = current->next;
 	}
-	printf("------------------------------\n");
+	// printf("------------------------------\n");
 
 }
 
@@ -398,15 +398,15 @@ void Mem_Dump(){
 //
 //   int page_size = getpagesize();
 //
-//   printf("Size of region = %d\n", size);
-//   printf("Page size = %d\n", page_size);
+//   // printf("Size of region = %d\n", size);
+//   // printf("Page size = %d\n", page_size);
 //
 //   int aligned = size % page_size;
 //   if(aligned != 0){
 //     size += page_size - aligned;
 //   }
 //
-//   printf("Size of region to be allocated = %d\n", size);
+//   // printf("Size of region to be allocated = %d\n", size);
 //
 //   // open the /dev/zero device
 //   int fd = open("/dev/zero", O_RDWR);
@@ -422,7 +422,7 @@ void Mem_Dump(){
 //   free_head_node->size = size - sizeof(free_mem);
 //   free_head_node->next = NULL;
 //
-//   printf("memory chunk address: %8x\nsize = %d\n", free_head_node, free_head_node->size);
+//   // printf("memory chunk address: %8x\nsize = %d\n", free_head_node, free_head_node->size);
 //
 //   return 0;
 // }
@@ -434,12 +434,12 @@ void Mem_Dump(){
 //
 //   // Going to need space to store the header for the memory, so add that size to current size
 //   // and then make sure that the new number is word aligned
-//   printf("raw size = %d\n", size);
+//   // printf("raw size = %d\n", size);
 //   int needed_size = 4 + sizeof(free_mem);
 //
 //   int aligned = size % 4;
 //   size += aligned;
-//   printf("aligned size = %d\n", size);
+//   // printf("aligned size = %d\n", size);
 //
 //   // make a previous node that is initally set to NULL and keep it updated, if at the end it is still NULL,
 //   // then we know that the new head of the free list is *next, otherwise the head of the free list is
@@ -451,11 +451,11 @@ void Mem_Dump(){
 //   free_mem *found_previous = NULL;
 //
 //   // go through the free list to find the position that we want to allocate
-//   printf("before trying to find the correct node\n");
+//   // printf("before trying to find the correct node\n");
 //   while(current != NULL){
 //     if(global_policy == MEM_POLICY_FIRSTFIT){
-//       printf("current->size = %d\n", current->size);
-//       printf("size i'm looking for = %d\n", size);
+//       // printf("current->size = %d\n", current->size);
+//       // printf("size i'm looking for = %d\n", size);
 //       if(current->size >= size){
 //         found_previous = previous;
 //         found = current;
@@ -465,8 +465,8 @@ void Mem_Dump(){
 //
 //     else if(global_policy == MEM_POLICY_BESTFIT){
 //       if(current->size == size){
-//         printf("current->size = %d\n", current->size);
-//         printf("size to be allocated = %d\n", size);
+//         // printf("current->size = %d\n", current->size);
+//         // printf("size to be allocated = %d\n", size);
 //
 //         found_previous = previous;
 //         found = current;
@@ -474,14 +474,14 @@ void Mem_Dump(){
 //       }
 //       else if(current->size > size){
 //         if(found == NULL){
-//           printf("current->size = %d\n", current->size);
-//           printf("size to be allocated = %d\n", size);
+//           // printf("current->size = %d\n", current->size);
+//           // printf("size to be allocated = %d\n", size);
 //           found_previous = previous;
 //           found = current;
 //         }
 //         else if(current->size < found->size){
-//           printf("current->size = %d\n", current->size);
-//           printf("size to be allocated = %d\n", size);
+//           // printf("current->size = %d\n", current->size);
+//           // printf("size to be allocated = %d\n", size);
 //           found_previous = previous;
 //           found = current;
 //         }
@@ -490,8 +490,8 @@ void Mem_Dump(){
 //     }
 //
 //     else if(global_policy == MEM_POLICY_WORSTFIT){
-//       printf("current->size = %d\n", current->size);
-//       printf("size to be allocated = %d\n", size);
+//       // printf("current->size = %d\n", current->size);
+//       // printf("size to be allocated = %d\n", size);
 //       if(current->size >= size){
 //         if(found == NULL){
 //           found_previous = previous;
@@ -509,11 +509,11 @@ void Mem_Dump(){
 //
 //   }
 //
-//   printf("found = %016lx\n", found);
-//   printf("found ending address = %016lx\n",(void*) found + (unsigned int) found->size);
+//   // printf("found = %016lx\n", found);
+//   // printf("found ending address = %016lx\n",(void*) found + (unsigned int) found->size);
 //   found = (((void *)found) - ((unsigned int) 7));
 //   if(found == NULL){
-//     printf("Never found the right size and returned null\n");
+//     // printf("Never found the right size and returned null\n");
 //     return NULL;
 //   }
 //
@@ -523,7 +523,7 @@ void Mem_Dump(){
 //   update the free list */
 //
 //   unsigned int unused_space = ((unsigned int)(found->size)) -((unsigned int) size);
-//   printf("unused space = %d\n", unused_space);
+//   // printf("unused space = %d\n", unused_space);
 //   /* relink the free list to make sure the found node isn't being referenced */
 //
 //
@@ -534,15 +534,15 @@ void Mem_Dump(){
 //
 //     free_mem *node_split = ((free_mem *) found) + address;
 //     // free_mem *node_split =(free_mem*) (((void *) found) + address);
-//     printf("found address = %016lx\n", found);
-//     printf("found->size = %d\n", found->size);
-//     printf("size of header = %d\n", sizeof(free_mem));
-//     printf("new size = %d\n", found->size - size - sizeof(free_mem));
-//     printf("address = %016lx\n", address);
-//     printf("node_split address = %016lx\n",  node_split);
+//     // printf("found address = %016lx\n", found);
+//     // printf("found->size = %d\n", found->size);
+//     // printf("size of header = %d\n", sizeof(free_mem));
+//     // printf("new size = %d\n", found->size - size - sizeof(free_mem));
+//     // printf("address = %016lx\n", address);
+//     // printf("node_split address = %016lx\n",  node_split);
 //     node_split->size = found->size - size - sizeof(free_mem);
-//     printf("new free node size = %d\n", node_split->size);
-//     printf("good here\n");
+//     // printf("new free node size = %d\n", node_split->size);
+//     // printf("good here\n");
 //     fflush(stdout);
 //
 //     node_split->next = found->next;
@@ -558,9 +558,9 @@ void Mem_Dump(){
 //   }
 //   else if((found->size > size && unused_space < needed_size)){
 //
-//     printf("Unused space is too small to be a new chunk, add it onto the allocated memory\n");
+//     // printf("Unused space is too small to be a new chunk, add it onto the allocated memory\n");
 //     size += unused_space;
-//     printf("new size = %d\n", size);
+//     // printf("new size = %d\n", size);
 //     /* there isn't enough unused space to make a chunk out of
 //     so give the entire chunk to the user */
 //     if(found_previous == NULL){
@@ -578,8 +578,8 @@ void Mem_Dump(){
 //   allocation->size = size;
 //   allocation->magicNumber = MAGIC_NUMBER;
 //
-//   printf("allocated address = %016lx\n",(unsigned int) allocation);
-//   printf("allocated ending address = %016lx\n", (void *)allocation + (unsigned int)allocation->size);
+//   // printf("allocated address = %016lx\n",(unsigned int) allocation);
+//   // printf("allocated ending address = %016lx\n", (void *)allocation + (unsigned int)allocation->size);
 //   //		checking to see if my makefile still thinks this is up to date
 //
 //   return (void *) (allocation + 1);
@@ -604,7 +604,7 @@ void Mem_Dump(){
 //
 //   free_mem *freed = (free_mem*) dealloc;
 //
-//   //	printf("freed pointer = %8x\n", ((unsigned long)freed));
+//   //	// printf("freed pointer = %8x\n", ((unsigned long)freed));
 //
 //   free_mem *previous = NULL;
 //   free_mem *current = free_head_node;
@@ -614,7 +614,7 @@ void Mem_Dump(){
 //
 //
 //
-//   //	printf("\n\nBefore Freeing the chunk: %8x\n\n\n", freed);
+//   //	// printf("\n\nBefore Freeing the chunk: %8x\n\n\n", freed);
 //   //	Mem_Dump();
 //
 //   /* Find the previous free chunk and the next free chunk */
@@ -671,31 +671,31 @@ void Mem_Dump(){
 //   free_mem *first = (free_mem *)first_chunk;
 //   free_mem *second = (free_mem *)second_chunk;
 //
-//   printf("ending address of first = %016lx\n", ((void *)first) + (unsigned int)first->size);
-//   printf("starting address of second = %016lx\n", second);
+//   // printf("ending address of first = %016lx\n", ((void *)first) + (unsigned int)first->size);
+//   // printf("starting address of second = %016lx\n", second);
 //
-//   printf("ending address = %016lx\n",(void *)second + (unsigned int)second->size);
+//   // printf("ending address = %016lx\n",(void *)second + (unsigned int)second->size);
 //
 //   if(((void *)(((void *)first) + (unsigned int)first->size)) == ((void *) second - (unsigned int)8)){
 //     first->size += second->size + sizeof(free_mem);
 //     first->next = second->next;
-//     printf("two chunks were merged\n");
-//     printf("address = %016lx\n", first);
-//     printf("ending address = %016lx\n",(void *)first + (unsigned int)first->size);
-//     printf("size of new chunk = %d\n", first->size);
+//     // printf("two chunks were merged\n");
+//     // printf("address = %016lx\n", first);
+//     // printf("ending address = %016lx\n",(void *)first + (unsigned int)first->size);
+//     // printf("size of new chunk = %d\n", first->size);
 //   }
 //
 //
 // }
 // void Mem_Dump(){
 //
-//   printf("------------------------------\nFREE LIST:\n");
+//   // printf("------------------------------\nFREE LIST:\n");
 //   free_mem* current = free_head_node;
 //   while(current != NULL){
-//     printf("address: %8x, total size: %d \n", current, current->size);
+//     // printf("address: %8x, total size: %d \n", current, current->size);
 //     current = current->next;
 //   }
-//   printf("------------------------------\n");
+//   // printf("------------------------------\n");
 //
 // }
 //
