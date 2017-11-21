@@ -250,7 +250,7 @@ int Mem_Free(void *ptr){
 
 
 	if(ptr == NULL){
-		return -1;
+		return;
 	}
 
 	allocated_mem *dealloc = (allocated_mem *) (ptr - 8);
@@ -277,7 +277,7 @@ int Mem_Free(void *ptr){
 
 
 //	// printf("\n\nBefore Freeing the chunk: %8x\n\n\n", freed);
-//	Mem_Dump();
+	Mem_Dump();
 
 	/* Find the previous free chunk and the next free chunk */
 
@@ -350,13 +350,13 @@ if(((void *)(((void *)first) + (unsigned int)first->size)) == ((void *) second -
 }
 void Mem_Dump(){
 
-	// printf("------------------------------\nFREE LIST:\n");
+	printf("------------------------------\nFREE LIST:\n");
 	free_mem* current = free_head_node;
 	while(current != NULL){
-		// printf("address: %8x, total size: %d \n", current, current->size);
+		printf("address: %8x, total size: %d \n", current, current->size);
 		current = current->next;
 	}
-	// printf("------------------------------\n");
+	printf("------------------------------\n");
 
 }
 
