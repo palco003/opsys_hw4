@@ -700,7 +700,7 @@ void Mem_Dump(){
 // }
 //
 //
-// float Mem_GetFragmentation(){
-//
-//   return 1;
-// }
+float Mem_GetFragmentation(){
+
+  return 1;
+}
